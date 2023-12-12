@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-function CustomerDetailForm({ customer, setShowDetails }) {
+function CreateCustomer({ setShowCreateCustomer }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,22 +10,10 @@ function CustomerDetailForm({ customer, setShowDetails }) {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [phone, setPhone] = useState("");
-  useEffect(() => {
-    if (customer) {
-      setFirstName(customer.firstName);
-      setLastName(customer.lastName);
-      setEmail(customer.email);
-      setAddress(customer.address);
-      setCity(customer.city);
-      setCountry(customer.country);
-      setPhone(customer.phone);
-    }
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let data = {
-      id: customer.id,
       firstName,
       lastName,
       email,
@@ -35,21 +23,20 @@ function CustomerDetailForm({ customer, setShowDetails }) {
       phone,
     };
     const token = localStorage.getItem("token");
-    const response = await axios.put("/api/customer", {
-      id: customer.id,
+    const response = await axios.post("/api/customer/create", {
       token,
       data,
     });
     if (response?.status == 200) {
-      alert("Successfully updated");
-      setShowDetails(false);
+      alert("New customer has been created.");
+      setShowCreateCustomer(false);
     }
   };
   return (
     <div className="fixed top-0 right-0 left-0 bottom-0 m-auto w-full h-full rounded-xl shadow-xl border-[1px] p-5 bg-white text-black flex flex-col  items-center max-w-[500px] max-h-[500px]">
       <button
         className="absolute right-[20px]"
-        onClick={() => setShowDetails(false)}>
+        onClick={() => setShowCreateCustomer(false)}>
         &#x2715;
       </button>
       <form onSubmit={handleSubmit} id="editCustomer">
@@ -141,7 +128,7 @@ function CustomerDetailForm({ customer, setShowDetails }) {
         </div>
         <div className="flex justify-center">
           <button className=" bg-green-600  text-white p-1 w-[100px] text-center font-semibold rounded mt-5 active:bg-green-700">
-            Update
+            Save
           </button>
         </div>
       </form>
@@ -149,4 +136,4 @@ function CustomerDetailForm({ customer, setShowDetails }) {
   );
 }
 
-export default CustomerDetailForm;
+export default CreateCustomer;

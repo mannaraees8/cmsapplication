@@ -26,8 +26,12 @@ function Login() {
         localStorage.setItem("email", username);
         setEmail(username);
         router.push("/");
+      } else {
+        alert(response.data["message"]);
       } // Handle success (redirect, etc.)
-    } catch (err) {}
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
